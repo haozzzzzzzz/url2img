@@ -8,3 +8,4 @@ cmd/url2img/linuxpkg/
 .idea/
 pkg/
 go.sum
+go.mod
