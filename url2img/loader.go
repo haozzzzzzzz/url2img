@@ -109,8 +109,8 @@ func (l *Loader) LoadPage(p Params) {
 	l.setAttributes(page.Settings())
 	l.setPath(page.Settings(), os.TempDir())
 
-	page.ConnectLoadFinished(func(ok bool) {
-		fmt.Printf("page load finish, status: %t\n", ok)
+	page.ConnectLoadFinished(func(pageOk bool) {
+		fmt.Printf("page load finish, status: %t\n", pageOk)
 
 		loadError := <-loadErrorC
 		if loadError && p.AbortOnLoadError {
