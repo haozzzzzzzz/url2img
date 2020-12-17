@@ -23,6 +23,7 @@ type Params struct {
 	Height  int     `json:"height"`
 	Zoom    float64 `json:"zoom"`
 	Full    bool    `json:"full"`
+	AbortOnLoadError bool `json:"abort_on_load_error"`
 }
 
 // Default and maximum values

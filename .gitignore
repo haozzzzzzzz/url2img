@@ -4,4 +4,7 @@ url2img/moc.cpp
 url2img/moc.go
 url2img/moc.h
 cmd/url2img/deploy
-cmd/url2img/linux
+cmd/url2img/linuxpkg/
+.idea/
+pkg/
+go.sum

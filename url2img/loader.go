@@ -2,6 +2,7 @@ package url2img
 
 import (
 	"encoding/hex"
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -77,6 +78,18 @@ func (l *Loader) LoadPage(p Params) {
 	networkAccessManager.ConnectSslErrors(func(reply *network.QNetworkReply, errors []*network.QSslError) {
 		reply.IgnoreSslErrors()
 	})
+
+	loadErrorC := make(chan bool)
+	networkAccessManager.ConnectFinished(func(reply *network.QNetworkReply) {
+		err := reply.Error()
+		if err == network.QNetworkReply__NoError {
+			loadErrorC <- false
+		} else {
+			loadErrorC <- true
+			fmt.Errorf("replay error. reply: %#v, err: %#v\n", reply.Url().Url(core.QUrl__None), err)
+		}
+	})
+
 	page.SetNetworkAccessManager(networkAccessManager)
 
 	view.SetPage(page)
@@ -96,7 +109,16 @@ func (l *Loader) LoadPage(p Params) {
 	l.setAttributes(page.Settings())
 	l.setPath(page.Settings(), os.TempDir())
 
-	page.ConnectLoadFinished(func(bool) {
+	page.ConnectLoadFinished(func(ok bool) {
+		fmt.Printf("page load finish, status: %t\n", ok)
+
+		loadError := <-loadErrorC
+		if loadError && p.AbortOnLoadError {
+			l.LoadFinished(p.Id, "ErrAbortLoadError")
+			view.DeleteLater()
+			return
+		}
+
 		if p.Delay > 0 && !p.Full {
 			time.Sleep(time.Duration(p.Delay) * time.Millisecond)
 		}
