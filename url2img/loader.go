@@ -79,15 +79,18 @@ func (l *Loader) LoadPage(p Params) {
 		reply.IgnoreSslErrors()
 	})
 
-	hasError := false
+	loadErrorC := make(chan bool, 1)
 	networkAccessManager.ConnectFinished(func(reply *network.QNetworkReply) {
 		err := reply.Error()
 		if err == network.QNetworkReply__NoError {
-			hasError = true
+			loadErrorC <- false
 		} else {
-			hasError = false
+			loadErrorC <- true
 			fmt.Errorf("replay error. reply: %#v, err: %#v\n", reply.Url().Url(core.QUrl__None), err)
 		}
+
+		// TODO close channel
+		close(loadErrorC)
 	})
 
 	page.SetNetworkAccessManager(networkAccessManager)
@@ -112,7 +115,8 @@ func (l *Loader) LoadPage(p Params) {
 	page.ConnectLoadFinished(func(pageOk bool) {
 		fmt.Printf("page load finish, status: %t\n", pageOk)
 
-		if hasError && p.AbortOnLoadError {
+		loadError := <-loadErrorC
+		if loadError && p.AbortOnLoadError {
 			l.LoadFinished(p.Id, "ErrAbortLoadError")
 			view.DeleteLater()
 			return
