@@ -82,6 +82,7 @@ func (l *Loader) LoadPage(p Params) {
 	// check assets reply status
 	networkAccessManager.ConnectFinished(func(reply *network.QNetworkReply) {
 		err := reply.Error()
+		fmt.Printf("%d\n", err)
 		if err != network.QNetworkReply__NoError {
 			fmt.Printf("asset replay error. reply: %#v, err: %#v\n", reply.Url().Url(core.QUrl__None), err)
 		}
