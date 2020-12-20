@@ -107,9 +107,6 @@ func (l *Loader) LoadPage(p Params) {
 	l.setPath(page.Settings(), os.TempDir())
 
 	page.ConnectLoadFinished(func(pageOk bool) {
-		// TODO debug
-		fmt.Printf("page_ok: %t, abort: %t", pageOk, p.AbortOnLoadError)
-
 		if !pageOk && p.AbortOnLoadError {
 			fmt.Printf("abort_on_load_error. url: %s\n", p.Url)
 
