@@ -85,9 +85,9 @@ func (l *Loader) LoadPage(p Params) {
 		err := reply.Error()
 		fmt.Printf("connect finished. err: %d", err)
 		if err == network.QNetworkReply__NoError {
-			loadErrorC <- false
+			//loadErrorC <- false
 		} else {
-			loadErrorC <- true
+			//loadErrorC <- true
 			fmt.Errorf("replay error. reply: %#v, err: %#v\n", reply.Url().Url(core.QUrl__None), err)
 		}
 	})
@@ -114,12 +114,12 @@ func (l *Loader) LoadPage(p Params) {
 	page.ConnectLoadFinished(func(pageOk bool) {
 		fmt.Printf("page load finish, status: %t\n", pageOk)
 
-		loadError := <-loadErrorC
-		if loadError && p.AbortOnLoadError {
-			l.LoadFinished(p.Id, "ErrAbortLoadError")
-			view.DeleteLater()
-			return
-		}
+		//loadError := <-loadErrorC
+		//if loadError && p.AbortOnLoadError {
+		//	l.LoadFinished(p.Id, "ErrAbortLoadError")
+		//	view.DeleteLater()
+		//	return
+		//}
 
 		if p.Delay > 0 && !p.Full {
 			time.Sleep(time.Duration(p.Delay) * time.Millisecond)
