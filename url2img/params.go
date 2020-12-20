@@ -24,6 +24,7 @@ type Params struct {
 	Zoom    float64 `json:"zoom"`
 	Full    bool    `json:"full"`
 	AbortOnLoadError bool `json:"abort_on_load_error"`
+	AbortOnLoadAssetError bool `json:"abort_on_load_asset_error"`
 }
 
 // Default and maximum values
@@ -38,6 +39,7 @@ const (
 	DefZoom    = 1.0
 	DefFull    = false
 	DefAbortOnLoadError = false
+	DefAbortOnLoadAssetError = false
 
 	maxQuality = 100
 	maxDelay   = 10000
@@ -166,6 +168,11 @@ func (p *Params) FormValues(r *http.Request) (err error) {
 		p.AbortOnLoadError = ( strAbortOnLoadError == "true" || strAbortOnLoadError == "1" )
 	}
 
+	p.AbortOnLoadAssetError = DefAbortOnLoadAssetError
+	strAbortOnLoadAssetError := r.FormValue("abort_on_load_asset_error")
+	if strAbortOnLoadAssetError != "" {
+		p.AbortOnLoadAssetError = ( strAbortOnLoadAssetError == "true" || strAbortOnLoadAssetError == "1" )
+	}
 	return
 }
 

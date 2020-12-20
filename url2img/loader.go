@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/therecipe/qt/core"
@@ -80,11 +81,16 @@ func (l *Loader) LoadPage(p Params) {
 	})
 
 	// check assets reply status
+	loadAssetErrorCount := uint64(0)
 	networkAccessManager.ConnectFinished(func(reply *network.QNetworkReply) {
 		err := reply.Error()
 		if err != network.QNetworkReply__NoError {
-			fmt.Println(reply.Url().Path(core.QUrl__PrettyDecoded))
+			path := reply.Url().Path(core.QUrl__PrettyDecoded)
+			if strings.HasSuffix(path, "/favicon.ico") {
+				return
+			}
 
+			atomic.AddUint64(&loadAssetErrorCount, 1)
 			fmt.Printf("asset reply error. reply: %#v, err: %#v\n", reply.Url().Url(core.QUrl__None), err)
 		}
 	})
@@ -109,10 +115,20 @@ func (l *Loader) LoadPage(p Params) {
 	l.setPath(page.Settings(), os.TempDir())
 
 	page.ConnectLoadFinished(func(pageOk bool) {
+
 		if !pageOk && p.AbortOnLoadError {
 			fmt.Printf("abort_on_load_error. url: %s\n", p.Url)
 
 			l.LoadFinished(p.Id, "ErrAbortOnLoadError")
+			view.DeleteLater()
+			return
+		}
+
+		errAssetCount := atomic.LoadUint64(&loadAssetErrorCount)
+		if errAssetCount > 0 && p.AbortOnLoadAssetError {
+			fmt.Printf("abort_on_load_asset_error. url: %s, error_asset_count: %d\n", p.Url, errAssetCount)
+
+			l.LoadFinished(p.Id, "ErrAbortOnLoadAssetError")
 			view.DeleteLater()
 			return
 		}
