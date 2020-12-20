@@ -79,6 +79,13 @@ func (l *Loader) LoadPage(p Params) {
 		reply.IgnoreSslErrors()
 	})
 
+	networkAccessManager.ConnectCreateRequest(func(op network.QNetworkAccessManager__Operation, originalReq *network.QNetworkRequest, outgoingData *core.QIODevice) *network.QNetworkReply {
+		reqUrl := originalReq.Url()
+		fmt.Println(reqUrl.Path(core.QUrl__PrettyDecoded))
+
+		return networkAccessManager.CreateRequest(op, originalReq, outgoingData)
+	})
+
 	// check assets reply status
 	networkAccessManager.ConnectFinished(func(reply *network.QNetworkReply) {
 		err := reply.Error()
