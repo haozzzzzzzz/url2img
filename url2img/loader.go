@@ -80,17 +80,16 @@ func (l *Loader) LoadPage(p Params) {
 	})
 
 	loadErrorC := make(chan bool, 1)
+	// TODO need to be close
 	networkAccessManager.ConnectFinished(func(reply *network.QNetworkReply) {
 		err := reply.Error()
+		fmt.Printf("connect finished. err: %d", err)
 		if err == network.QNetworkReply__NoError {
 			loadErrorC <- false
 		} else {
 			loadErrorC <- true
 			fmt.Errorf("replay error. reply: %#v, err: %#v\n", reply.Url().Url(core.QUrl__None), err)
 		}
-
-		// TODO close channel
-		close(loadErrorC)
 	})
 
 	page.SetNetworkAccessManager(networkAccessManager)
