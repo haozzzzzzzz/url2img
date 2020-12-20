@@ -80,6 +80,7 @@ func (l *Loader) LoadPage(p Params) {
 	})
 
 	loadErrorC := make(chan bool, 1)
+	_ = loadErrorC
 	// TODO need to be close
 	networkAccessManager.ConnectFinished(func(reply *network.QNetworkReply) {
 		err := reply.Error()
