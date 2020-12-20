@@ -37,6 +37,7 @@ const (
 	DefHeight  = 1200
 	DefZoom    = 1.0
 	DefFull    = false
+	DefAbortOnLoadError = false
 
 	maxQuality = 100
 	maxDelay   = 10000
@@ -157,6 +158,12 @@ func (p *Params) FormValues(r *http.Request) (err error) {
 	p.Full = DefFull
 	if r.FormValue("full") != "" {
 		p.Full = (r.FormValue("full") == "true" || r.FormValue("full") == "1")
+	}
+
+	p.AbortOnLoadError = DefAbortOnLoadError
+	strAbortOnLoadError := r.FormValue("abort_on_load_error")
+	if strAbortOnLoadError != "" {
+		p.AbortOnLoadError = ( strAbortOnLoadError == "true" || strAbortOnLoadError == "1" )
 	}
 
 	return
