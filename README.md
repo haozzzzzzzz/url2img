@@ -24,6 +24,8 @@ width   | int       | 1600      | Viewport width
 height  | int       | 1200      | Viewport height
 zoom    | float     | 1.0       | Zoom factor
 full    | bool      | false     | Capture full page height
+abort_on_load_error    | bool      | false     | Abort generating screenshot if failed to load main page
+abort_on_load_asset_error    | bool      | false     | Abort generating screenshot if failed to load assets
 
 ### Usage
 
