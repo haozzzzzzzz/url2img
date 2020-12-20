@@ -79,17 +79,11 @@ func (l *Loader) LoadPage(p Params) {
 		reply.IgnoreSslErrors()
 	})
 
-	loadErrorC := make(chan bool, 1)
-	_ = loadErrorC
-	// TODO need to be close
+	// check assets reply status
 	networkAccessManager.ConnectFinished(func(reply *network.QNetworkReply) {
 		err := reply.Error()
-		fmt.Printf("connect finished. err: %d", err)
-		if err == network.QNetworkReply__NoError {
-			//loadErrorC <- false
-		} else {
-			//loadErrorC <- true
-			fmt.Errorf("replay error. reply: %#v, err: %#v\n", reply.Url().Url(core.QUrl__None), err)
+		if err != network.QNetworkReply__NoError {
+			fmt.Errorf("asset replay error. reply: %#v, err: %#v\n", reply.Url().Url(core.QUrl__None), err)
 		}
 	})
 
@@ -113,14 +107,11 @@ func (l *Loader) LoadPage(p Params) {
 	l.setPath(page.Settings(), os.TempDir())
 
 	page.ConnectLoadFinished(func(pageOk bool) {
-		fmt.Printf("page load finish, status: %t\n", pageOk)
-
-		//loadError := <-loadErrorC
-		//if loadError && p.AbortOnLoadError {
-		//	l.LoadFinished(p.Id, "ErrAbortLoadError")
-		//	view.DeleteLater()
-		//	return
-		//}
+		if !pageOk && p.AbortOnLoadError {
+			l.LoadFinished(p.Id, "ErrAbortOnLoadError")
+			view.DeleteLater()
+			return
+		}
 
 		if p.Delay > 0 && !p.Full {
 			time.Sleep(time.Duration(p.Delay) * time.Millisecond)
