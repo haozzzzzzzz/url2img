@@ -79,13 +79,13 @@ func (l *Loader) LoadPage(p Params) {
 		reply.IgnoreSslErrors()
 	})
 
-	//// check assets reply status
-	//networkAccessManager.ConnectFinished(func(reply *network.QNetworkReply) {
-	//	err := reply.Error()
-	//	if err != network.QNetworkReply__NoError {
-	//		fmt.Printf("asset reply error. reply: %#v, err: %#v\n", reply.Url().Url(core.QUrl__None), err)
-	//	}
-	//})
+	// check assets reply status
+	networkAccessManager.ConnectFinished(func(reply *network.QNetworkReply) {
+		err := reply.Error()
+		if err != network.QNetworkReply__NoError {
+			fmt.Printf("asset reply error. reply: %#v, err: %#v\n", reply.Url().Url(core.QUrl__None), err)
+		}
+	})
 
 	page.SetNetworkAccessManager(networkAccessManager)
 
