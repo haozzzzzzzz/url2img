@@ -108,6 +108,8 @@ func (l *Loader) LoadPage(p Params) {
 
 	page.ConnectLoadFinished(func(pageOk bool) {
 		if !pageOk && p.AbortOnLoadError {
+			fmt.Printf("abort_on_load_error. url: %s\n", p.Url)
+
 			l.LoadFinished(p.Id, "ErrAbortOnLoadError")
 			view.DeleteLater()
 			return
