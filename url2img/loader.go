@@ -83,7 +83,7 @@ func (l *Loader) LoadPage(p Params) {
 	networkAccessManager.ConnectFinished(func(reply *network.QNetworkReply) {
 		err := reply.Error()
 		if err != network.QNetworkReply__NoError {
-			fmt.Errorf("asset replay error. reply: %#v, err: %#v\n", reply.Url().Url(core.QUrl__None), err)
+			fmt.Printf("asset replay error. reply: %#v, err: %#v\n", reply.Url().Url(core.QUrl__None), err)
 		}
 	})
 
