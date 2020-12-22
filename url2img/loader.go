@@ -92,19 +92,19 @@ func (l *Loader) LoadPage(p Params) {
 			if strings.Contains(oUrl.Host, "doubanio.com") { // 豆瓣图片
 				//set header
 				headers := map[string]string{
-					":authority": oUrl.Host,
-					":method" : "GET",
-					":path": oUrl.Path,
-					":scheme": oUrl.Scheme,
-					"accept": "image/avif,image/webp,image/apng,image/*,*/*;q=0.8",
-					"accept-encoding" : "gzip, deflate, br",
-					"accept-language": "zh-CN,zh;q=2.9,en;q=0.8",
-					"sec-ch-ua": `"Google Chrome";v="87", " Not;A Brand";v="99", "Chromium";v="87"`,
-					"sec-ch-ua-mobile": "?0",
-					"sec-fetch-dest": "image",
-					"sec-fetch-mode": "no-cors",
-					"sec-fetch-site": "cross-site",
-					"user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36",
+					":Authority": oUrl.Host,
+					":Method" : "GET",
+					":Path": oUrl.Path,
+					":Scheme": oUrl.Scheme,
+					"Accept": "image/avif,image/webp,image/apng,image/*,*/*;q=0.8",
+					"Accept-Encoding" : "gzip, deflate, br",
+					"Accept-Language": "zh-CN,zh;q=2.9,en;q=0.8",
+					"Sec-Ch-Ua": `"Google Chrome";v="87", " Not;A Brand";v="99", "Chromium";v="87"`,
+					"Sec-Ch-Ua-mobile": "?0",
+					"Sec-Fetch-Dest": "image",
+					"Sec-Fetch-Mode": "no-cors",
+					"Sec-Fetch-Site": "cross-site",
+					"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36",
 				}
 				fmt.Printf("%d %#v\n", op, headers)
 
