@@ -3,6 +3,7 @@ package url2img
 import (
 	"encoding/hex"
 	"fmt"
+	"net/url"
 	"os"
 	"strconv"
 	"strings"
@@ -80,20 +81,40 @@ func (l *Loader) LoadPage(p Params) {
 		reply.IgnoreSslErrors()
 	})
 
-	// set header
-	//headers := map[string]string{
-	//	"sec-ch-ua": `"Google Chrome";v="87", " Not;A Brand";v="99", "Chromium";v="87"`,
-	//	"sec-ch-ua-mobile": "?0",
-	//	"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36",
-	//}
-	//
-	//networkAccessManager.ConnectCreateRequest(func(op network.QNetworkAccessManager__Operation, originalReq *network.QNetworkRequest, outgoingData *core.QIODevice) *network.QNetworkReply {
-	//	fmt.Println(originalReq.Url().Url(core.QUrl__None))
-	//	for key, value := range headers {
-	//		originalReq.SetRawHeader(core.NewQByteArray2(key, len(key)), core.NewQByteArray2(value, len(value)))
-	//	}
-	//	return networkAccessManager.CreateRequestDefault(op, originalReq, outgoingData)
-	//})
+
+	networkAccessManager.ConnectCreateRequest(func(op network.QNetworkAccessManager__Operation, originalReq *network.QNetworkRequest, outgoingData *core.QIODevice) *network.QNetworkReply {
+		qUrl := originalReq.Url().Url(core.QUrl__None)
+		oUrl, errP := url.Parse(qUrl)
+		if errP != nil {
+			fmt.Printf("parse url failed. url: %s, err: %s", qUrl, errP)
+		} else {
+
+			if strings.Contains(oUrl.Host, "dobanio.com") { // 豆瓣图片
+				//set header
+				headers := map[string]string{
+					":authority": oUrl.Host,
+					":method" : "GET",
+					":path": oUrl.Path,
+					":scheme": oUrl.Scheme,
+					"accept": "image/avif,image/webp,image/apng,image/*,*/*;q=0.8",
+					"accept-encoding" : "gzip, deflate, br",
+					"accept-language": "zh-CN,zh;q=2.9,en;q=0.8",
+					"sec-ch-ua": `"Google Chrome";v="87", " Not;A Brand";v="99", "Chromium";v="87"`,
+					"sec-ch-ua-mobile": "?0",
+					"sec-fetch-dest": "image",
+					"sec-fetch-mode": "no-cors",
+					"sec-fetch-site": "cross-site",
+					"user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36",
+				}
+
+				for key, value := range headers {
+					originalReq.SetRawHeader(core.NewQByteArray2(key, len(key)), core.NewQByteArray2(value, len(value)))
+				}
+			}
+		}
+
+		return networkAccessManager.CreateRequestDefault(op, originalReq, outgoingData)
+	})
 
 	loadAssetErrorCount := uint64(0)
 	// check assets reply status
