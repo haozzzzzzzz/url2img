@@ -89,7 +89,7 @@ func (l *Loader) LoadPage(p Params) {
 			fmt.Printf("parse url failed. url: %s, err: %s", qUrl, errP)
 		} else {
 
-			if strings.Contains(oUrl.Host, "dobanio.com") { // 豆瓣图片
+			if strings.Contains(oUrl.Host, "doubanio.com") { // 豆瓣图片
 				//set header
 				headers := map[string]string{
 					":authority": oUrl.Host,
