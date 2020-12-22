@@ -89,11 +89,12 @@ func (l *Loader) LoadPage(p Params) {
 		"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36",
 	}
 
+	_ = headers
 	networkAccessManager.ConnectCreateRequest(func(op network.QNetworkAccessManager__Operation, originalReq *network.QNetworkRequest, outgoingData *core.QIODevice) *network.QNetworkReply {
 		fmt.Println(originalReq.Url().Url(core.QUrl__None))
-		for key, value := range headers {
-			originalReq.SetRawHeader(core.NewQByteArray2(key, len(key)), core.NewQByteArray2(value, len(value)))
-		}
+		//for key, value := range headers {
+		//	originalReq.SetRawHeader(core.NewQByteArray2(key, len(key)), core.NewQByteArray2(value, len(value)))
+		//}
 		return networkAccessManager.CreateRequest(op, originalReq, outgoingData)
 	})
 
@@ -248,7 +249,7 @@ func (l *Loader) setAttributes(settings *webkit.QWebSettings) {
 	settings.SetAttribute(webkit.QWebSettings__AcceleratedCompositingEnabled, false)
 	settings.SetAttribute(webkit.QWebSettings__TiledBackingStoreEnabled, false)
 
-	//settings.SetAttribute(webkit.QWebSettings__WebSecurityEnabled, false)
+	settings.SetAttribute(webkit.QWebSettings__WebSecurityEnabled, false)
 	settings.SetAttribute(webkit.QWebSettings__LocalStorageEnabled, false)
 	settings.SetAttribute(webkit.QWebSettings__LocalStorageDatabaseEnabled, false)
 	settings.SetAttribute(webkit.QWebSettings__OfflineStorageDatabaseEnabled, false)
