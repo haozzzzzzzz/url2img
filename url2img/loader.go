@@ -106,6 +106,7 @@ func (l *Loader) LoadPage(p Params) {
 					"sec-fetch-site": "cross-site",
 					"user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36",
 				}
+				fmt.Printf("%#v\n", headers)
 
 				for key, value := range headers {
 					originalReq.SetRawHeader(core.NewQByteArray2(key, len(key)), core.NewQByteArray2(value, len(value)))
