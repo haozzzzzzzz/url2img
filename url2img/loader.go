@@ -92,7 +92,7 @@ func (l *Loader) LoadPage(p Params) {
 			if strings.Contains(oUrl.Host, "doubanio.com") { // 豆瓣图片
 				//set header
 				headers := map[string]string{
-					":Authority": oUrl.Host,
+					":authority": oUrl.Host,
 					//":Method" : "GET",
 					//":Path": oUrl.Path,
 					//":Scheme": oUrl.Scheme,
