@@ -95,7 +95,8 @@ func (l *Loader) LoadPage(p Params) {
 		//for key, value := range headers {
 		//	originalReq.SetRawHeader(core.NewQByteArray2(key, len(key)), core.NewQByteArray2(value, len(value)))
 		//}
-		return networkAccessManager.CreateRequest(op, originalReq, outgoingData)
+		return networkAccessManager.CreateRequestDefault(op, originalReq, outgoingData)
+		//return networkAccessManager.CreateRequest(op, originalReq, outgoingData)
 	})
 
 	networkAccessManager.ConnectFinished(func(reply *network.QNetworkReply) {
