@@ -25,6 +25,7 @@ type Params struct {
 	Full    bool    `json:"full"`
 	AbortOnLoadError bool `json:"abort_on_load_error"`
 	AbortOnLoadAssetError bool `json:"abort_on_load_asset_error"`
+	Headers map[string]string `json:"headers"`
 }
 
 // Default and maximum values
@@ -173,6 +174,9 @@ func (p *Params) FormValues(r *http.Request) (err error) {
 	if strAbortOnLoadAssetError != "" {
 		p.AbortOnLoadAssetError = ( strAbortOnLoadAssetError == "true" || strAbortOnLoadAssetError == "1" )
 	}
+
+	p.Headers = make(map[string]string)
+
 	return
 }
 

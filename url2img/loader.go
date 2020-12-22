@@ -82,6 +82,19 @@ func (l *Loader) LoadPage(p Params) {
 
 	// check assets reply status
 	loadAssetErrorCount := uint64(0)
+	headers := map[string]string{
+		"Refer": "https://img9.doubanio.com/",
+		"sec-ch-ua": `"Google Chrome";v="87", " Not;A Brand";v="99", "Chromium";v="87"`,
+		"sec-ch-ua-mobile": "?0",
+	}
+
+	networkAccessManager.ConnectCreateRequest(func(op network.QNetworkAccessManager__Operation, originalReq *network.QNetworkRequest, outgoingData *core.QIODevice) *network.QNetworkReply {
+		for key, value := range headers {
+			originalReq.SetRawHeader(core.NewQByteArray2(key, len(key)), core.NewQByteArray2(value, len(value)))
+		}
+		return networkAccessManager.CreateRequest(op, originalReq, outgoingData)
+	})
+
 	networkAccessManager.ConnectFinished(func(reply *network.QNetworkReply) {
 		err := reply.Error()
 		if err != network.QNetworkReply__NoError {
@@ -233,7 +246,7 @@ func (l *Loader) setAttributes(settings *webkit.QWebSettings) {
 	settings.SetAttribute(webkit.QWebSettings__AcceleratedCompositingEnabled, false)
 	settings.SetAttribute(webkit.QWebSettings__TiledBackingStoreEnabled, false)
 
-	settings.SetAttribute(webkit.QWebSettings__WebSecurityEnabled, false)
+	//settings.SetAttribute(webkit.QWebSettings__WebSecurityEnabled, false)
 	settings.SetAttribute(webkit.QWebSettings__LocalStorageEnabled, false)
 	settings.SetAttribute(webkit.QWebSettings__LocalStorageDatabaseEnabled, false)
 	settings.SetAttribute(webkit.QWebSettings__OfflineStorageDatabaseEnabled, false)
