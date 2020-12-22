@@ -233,6 +233,7 @@ func (l *Loader) setAttributes(settings *webkit.QWebSettings) {
 	settings.SetAttribute(webkit.QWebSettings__AcceleratedCompositingEnabled, false)
 	settings.SetAttribute(webkit.QWebSettings__TiledBackingStoreEnabled, false)
 
+	settings.SetAttribute(webkit.QWebSettings__WebSecurityEnabled, false)
 	settings.SetAttribute(webkit.QWebSettings__LocalStorageEnabled, false)
 	settings.SetAttribute(webkit.QWebSettings__LocalStorageDatabaseEnabled, false)
 	settings.SetAttribute(webkit.QWebSettings__OfflineStorageDatabaseEnabled, false)
