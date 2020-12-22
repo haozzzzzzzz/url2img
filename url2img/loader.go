@@ -80,23 +80,23 @@ func (l *Loader) LoadPage(p Params) {
 		reply.IgnoreSslErrors()
 	})
 
-	// check assets reply status
+	// set header
+	//headers := map[string]string{
+	//	"sec-ch-ua": `"Google Chrome";v="87", " Not;A Brand";v="99", "Chromium";v="87"`,
+	//	"sec-ch-ua-mobile": "?0",
+	//	"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36",
+	//}
+	//
+	//networkAccessManager.ConnectCreateRequest(func(op network.QNetworkAccessManager__Operation, originalReq *network.QNetworkRequest, outgoingData *core.QIODevice) *network.QNetworkReply {
+	//	fmt.Println(originalReq.Url().Url(core.QUrl__None))
+	//	for key, value := range headers {
+	//		originalReq.SetRawHeader(core.NewQByteArray2(key, len(key)), core.NewQByteArray2(value, len(value)))
+	//	}
+	//	return networkAccessManager.CreateRequestDefault(op, originalReq, outgoingData)
+	//})
+
 	loadAssetErrorCount := uint64(0)
-	headers := map[string]string{
-		"Refer": "https://img9.doubanio.com/",
-		"sec-ch-ua": `"Google Chrome";v="87", " Not;A Brand";v="99", "Chromium";v="87"`,
-		"sec-ch-ua-mobile": "?0",
-		"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36",
-	}
-
-	networkAccessManager.ConnectCreateRequest(func(op network.QNetworkAccessManager__Operation, originalReq *network.QNetworkRequest, outgoingData *core.QIODevice) *network.QNetworkReply {
-		fmt.Println(originalReq.Url().Url(core.QUrl__None))
-		for key, value := range headers {
-			originalReq.SetRawHeader(core.NewQByteArray2(key, len(key)), core.NewQByteArray2(value, len(value)))
-		}
-		return networkAccessManager.CreateRequestDefault(op, originalReq, outgoingData)
-	})
-
+	// check assets reply status
 	networkAccessManager.ConnectFinished(func(reply *network.QNetworkReply) {
 		err := reply.Error()
 		if err != network.QNetworkReply__NoError {
@@ -248,7 +248,7 @@ func (l *Loader) setAttributes(settings *webkit.QWebSettings) {
 	settings.SetAttribute(webkit.QWebSettings__AcceleratedCompositingEnabled, false)
 	settings.SetAttribute(webkit.QWebSettings__TiledBackingStoreEnabled, false)
 
-	settings.SetAttribute(webkit.QWebSettings__WebSecurityEnabled, false)
+	//settings.SetAttribute(webkit.QWebSettings__WebSecurityEnabled, false)
 	settings.SetAttribute(webkit.QWebSettings__LocalStorageEnabled, false)
 	settings.SetAttribute(webkit.QWebSettings__LocalStorageDatabaseEnabled, false)
 	settings.SetAttribute(webkit.QWebSettings__OfflineStorageDatabaseEnabled, false)
